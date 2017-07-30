@@ -1,37 +1,25 @@
-const GET_LIST_OF_STOPS_URL = "http://bustime.mta.info/api/where/routes-for-agency/MTA%20NYCT.json?key=648d4b3b-938f-48e2-9502-addf58435739"
 
-let data
-const store = {busLines: []}
 
-data = fetch(GET_LIST_OF_STOPS_URL, {
-  mode: 'no-cors'
-})
+const store = {busLines: [], agencies: [], busStops: []}
 
-.then(convertToJSON)
-.then(createBusLines)
 
-function convertToJSON(res) {
-  return res.json();
+
+function seed (busLine) {
+  let m42 = BusLine.find(busLine)
+  m42.getStops()
+  m42.getVehicles()
 }
 
-class BusLine {
-  constructor(name, agency, idText, desc) {
-    this.name = name
-    this.agency = agency
-    this.idText = idText
-    this.description = desc
-    store.busLines.push(this)
-
-  }
+function seedV(busLine) {
+  BusLine.find(busLine).stops[0].getVehicles()
 }
 
-function createBusLines(data) {
-  let stopsObj = data.data.list
-  stopsObj.forEach((busLine) => {
-    new BusLine(busLine.shortName, busLine.agencyId, busLine.id, busLine.description)
-  })
-  debugger;
-}
+
+
+
+
+
+
 //
 // function then(callback) {
 //   // do somework
@@ -39,6 +27,7 @@ function createBusLines(data) {
 //   var data
 //   return Promise.resolve(callback(data))
 // }
+
 
 
 function getStopData() {
